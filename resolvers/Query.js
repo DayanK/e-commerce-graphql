@@ -4,7 +4,7 @@ export const Query = {
     return ["Hello", "World"];
   },
 
-  products: (parent, { filter }, { products, reviews}, infos) => {
+  products: (parent, { filter }, { products, reviews }, infos) => {
     let filteredProducts = products;
 
     if (filter) {
@@ -45,11 +45,50 @@ export const Query = {
 
   categories: (parent, args, { categories }, infos) => categories,
 
-  category: (parent, { id }, { categories }, infos) => {
+  category: ( parent, { id, filter }, { categories, products, reviews }, infos ) => {
+
+    // find Category by id
     const category = categories.find((category) => category.id === id);
+
     if (!category) {
       throw new Error(`category with ${id} not found`);
     }
-    return category;
+
+      // Filter the products within the category based on filter criteria
+    let categoryProducts = products.filter(
+      (product) => product.categoryId === id
+    );
+
+    if (filter) {
+      const { onSale, avgRating } = filter;
+
+    // Filter by products on sale if `onSale` is defined
+    if (onSale) {
+        categoryProducts = categoryProducts.filter((product) => product.onSale);
+      }
+
+        // Filter by average rating if `avgRating` is provided and valid (between 1 and 5)
+
+        if (avgRating && [1, 2, 3, 4, 5].includes(avgRating)) {
+
+            categoryProducts = categoryProducts.filter((product) => {
+
+                // Filter reviews for the products in this category
+                const productReviews = reviews.filter((review) => review.productId === product.id);
+
+                // Calculate the average rating for the product
+                const avgProductRating =  productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length;
+
+                // Keep products with an average rating equal to or greater than `avgRating`
+                return avgProductRating >= avgRating;
+            });
+        }
+    }
+
+    // Retourner la catégorie avec les produits filtrés
+    return {
+      ...category,
+      products: categoryProducts,
+    };
   },
 };
