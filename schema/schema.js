@@ -1,7 +1,6 @@
 import gql from "graphql-tag";
 
 export const typeDefs = gql`
-
   type Query {
     hello: [String!]!
     products: [Product!]!
@@ -19,11 +18,20 @@ export const typeDefs = gql`
     price: Float!
     onSale: Boolean!
     category: Category
+    reviews: [Reviews!]!
   }
 
   type Category {
     id: ID!
     name: String!
     products: [Product!]!
+  }
+
+  type Reviews {
+    id: ID!
+    date: String!
+    title: String!
+    comment: String!
+    rating: Int!
   }
 `;

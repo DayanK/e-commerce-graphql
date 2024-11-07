@@ -288,4 +288,4 @@ const reviews = [
 ];
 
 
-export { products, categories, reviews}
+export { products, categories, reviews };
