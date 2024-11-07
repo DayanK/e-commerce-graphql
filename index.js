@@ -4,12 +4,15 @@ import { typeDefs } from "./schema/schema.js";
 import { Product } from "./resolvers/Product.js";
 import { Query } from "./resolvers/Query.js";
 import { Category } from "./resolvers/Category.js";
-import { categories, products, reviews} from "./data/db.js";
+import { Mutation } from "./resolvers/Mutation.js";
+import { db } from "./data/db.js";
+
 
 const server = new ApolloServer({
   typeDefs,
   resolvers: {
     Query,
+    Mutation,
     Category,
     Product,
   }
@@ -18,10 +21,7 @@ const server = new ApolloServer({
 const { url } = await startStandaloneServer(server, {
   context: async ({ req }) => {
     return {
-      sayHello: () => console.log("Hello"),
-      categories,
-      products,
-      reviews
+      db,
     };
   },
 });

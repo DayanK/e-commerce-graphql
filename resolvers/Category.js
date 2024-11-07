@@ -1,7 +1,7 @@
 
 export const Category = {
-  products: ({ id: categoryId }, { filter }, { products }, info) => {
-    let filteredCategoryProducts = products.filter((product) => product.categoryId === categoryId);
+  products: ({ id: categoryId }, { filter }, { db }, info) => {
+    let filteredCategoryProducts = db.products.filter((product) => product.categoryId === categoryId);
 
     if (filter) {
       if (filter.onSale === true) {
