@@ -116,49 +116,128 @@ export const Mutation = {
       } else return product;
     });
     return {
-        success: true,
-        message: `Category with id ${id} was successfully deleted.`,
-      };
+      success: true,
+      message: `Category with id ${id} was successfully deleted.`,
+    };
   },
 
   deleteProduct: (parent, { id }, { db }, info) => {
-      // Check if the product exists before attempting deletion
-      const productExists = db.products.some((product) => product.id === id);
+    // Check if the product exists before attempting deletion
+    const productExists = db.products.some((product) => product.id === id);
 
-      if (!productExists) {
-        return {
-          success: false,
-          message: `Product with id ${id} not found.`,
-        };
-      }
-    
-      // Remove the product and associated reviews
+    if (!productExists) {
+      return {
+        success: false,
+        message: `Product with id ${id} not found.`,
+      };
+    }
+
+    // Remove the product and associated reviews
     db.products = db.products.filter((product) => product.id !== id);
-    db.reviews = db.reviews.filter((review)=> review.productId !== id);
+    db.reviews = db.reviews.filter((review) => review.productId !== id);
 
     return {
-        success: true,
-        message: `Product with id ${id} was successfully deleted.`,
+      success: true,
+      message: `Product with id ${id} was successfully deleted.`,
     };
   },
 
   deleteReview: (parent, { id }, { db }, info) => {
-     // Check if the review exists
-     const reviewExists = db.reviews.some((review) => review.id === id);
+    // Check if the review exists
+    const reviewExists = db.reviews.some((review) => review.id === id);
 
-     if (!reviewExists) {
-       return {
-         success: false,
-         message: `Review with id ${id} not found.`,
-       };
-     }
-  
-  // Remove the review from the database
-  db.reviews = db.reviews.filter((review) => review.id !== id);
+    if (!reviewExists) {
+      return {
+        success: false,
+        message: `Review with id ${id} not found.`,
+      };
+    }
 
-  return {
-    success: true,
-    message: `Review with id ${id} was successfully deleted.`,
-  };
-},
+    // Remove the review from the database
+    db.reviews = db.reviews.filter((review) => review.id !== id);
+
+    return {
+      success: true,
+      message: `Review with id ${id} was successfully deleted.`,
+    };
+  },
+
+  updateCategory: (parent, { id, input }, { db }, info) => {
+
+    // Find the index of the category with the given ID
+    const index = db.categories.findIndex((category) => category.id === id);
+
+    // Check if the category exists
+    if (index === -1) {
+        return {
+          success: false,
+          message: `Category with id ${id} not found.`,
+          category: null,
+        };
+      }
+
+    // Update the category
+    db.categories[index] = {
+      ...db.categories[index],
+      ...input
+    };
+
+    return {
+      success: true,
+      message: `Category with id ${id} successfully updated.`,
+      category: db.categories[index],
+    };
+  },
+
+  updateProduct: (parent, { id, input }, { db }, info) => {
+    // Find the index of the product with the given ID
+    const index = db.products.findIndex((product) => product.id === id);
+
+    // Check if the product exists
+    if (index === -1) {
+      return {
+        success: false,
+        message: `Product with id ${id} not found.`,
+        product: null,
+      };
+    }
+
+    // Update the product
+    db.products[index] = {
+      ...db.products[index],
+      ...input
+    };
+
+    return {
+      success: true,
+      message: `Product with id ${id} successfully updated.`,
+      product: db.products[index],
+    };
+  },
+
+  updateReview: (parent, { id, input }, { db }, info) => {
+    // Find the index of the review with the given ID
+    const index = db.reviews.findIndex((review) => review.id === id);
+
+    // Check if the review exists
+    if (index === -1) {
+      return {
+        success: false,
+        message: `Review with id ${id} not found.`,
+        review: null,
+      };
+    }
+
+    // Update the review
+    db.reviews[index] = {
+      ...db.reviews[index],
+      ...input
+    };
+
+    return {
+      success: true,
+      message: `Review with id ${id} successfully updated.`,
+      review: db.reviews[index],
+    };
+  },
 };

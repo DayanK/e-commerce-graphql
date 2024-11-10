@@ -7,8 +7,6 @@ export const Query = {
   products: (parent, { filter }, { db }, infos) => {
     let filteredProducts = db.products;
 
-    console.log("filteredprod", filteredProducts)
-
     if (filter) {
       const { onSale, avgRating } = filter;
       if (onSale) {

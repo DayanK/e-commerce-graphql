@@ -10,12 +10,15 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addCategory(input: AddCategoryInput!) : AddCategoryResult!
-    addProduct(input: AddProductInput!) : AddProductResult!
-    addReview(input: AddReviewInput!) : AddReviewsResult!
+    addCategory(input: AddCategoryInput!): AddCategoryResult!
+    addProduct(input: AddProductInput!): AddProductResult!
+    addReview(input: AddReviewInput!): AddReviewsResult!
     deleteCategory(id: ID!): DeleteCategoryResult!
     deleteProduct(id: ID!): DeleteProductResult!
     deleteReview(id: ID!): DeleteReviewResult!
+    updateCategory(id: ID!, input: UpdateCategoryInput): UpdateCategoryResult!
+    updateProduct(id: ID!, input: UpdateProductInput!): UpdateProductResult!
+    updateReview(id: ID!, input: UpdateReviewInput!): UpdateReviewResult!
   }
 
   type AddCategoryResult {
@@ -46,7 +49,7 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
   }
-  
+
   type DeleteReviewResult {
     success: Boolean!
     message: String!
@@ -70,7 +73,7 @@ export const typeDefs = gql`
     products(filter: ProductsFilterInput): [Product!]!
   }
 
-  type Reviews {
+    type Reviews {
     id: ID!
     date: String!
     title: String!
@@ -78,9 +81,11 @@ export const typeDefs = gql`
     rating: Int!
   }
 
+
+
   input ProductsFilterInput {
     onSale: Boolean
-    avgRating:Int
+    avgRating: Int
   }
 
   input AddCategoryInput {
@@ -94,7 +99,7 @@ export const typeDefs = gql`
     quantity: Int!
     price: Float!
     onSale: Boolean!
-    categoryId: String!
+    categoryId: String
   }
 
   input AddReviewInput {
@@ -104,4 +109,45 @@ export const typeDefs = gql`
     rating: Int!
     productId: ID!
   }
+
+
+  type UpdateCategoryResult {
+    success: Boolean!
+    message: String!
+    category: Category
+  }
+
+  input UpdateCategoryInput {
+    name: String!
+  }
+
+  type UpdateProductResult {
+    success: Boolean!
+    message: String!
+    product: Product
+}
+
+type UpdateReviewResult {
+    success: Boolean!
+    message: String!
+    review: Reviews
+}
+
+input UpdateProductInput {
+    name: String!
+    description: String!
+    image: String!
+    quantity: Int!
+    price: Float!
+    onSale: Boolean!
+    categoryId: String
+}
+
+input UpdateReviewInput {
+    date: String!
+    title: String!
+    comment: String!
+    rating: Int!
+    productId: ID!
+}
 `;
